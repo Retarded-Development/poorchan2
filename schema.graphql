@@ -1,0 +1,99 @@
+scalar Time
+
+type Board {
+  id: ID!
+  short_name: String!
+  long_name: String!
+  info: String!
+  post_count: Int!
+  created_at: Time!
+  updated_at: Time!
+  post_limit: Int! 
+  bump_limit: Int!
+  board_limit: Int!
+  page_size: Int!
+  banners: [Banner!]! 
+  is_global: Boolean!
+  is_located: Boolean!
+  created_by: User!
+  moderators: [User!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  info: String!
+  created_at: Time!
+  last_login: Time!
+  edited_at: Time!
+  boards_created: [Board!]!
+  boards_moderated: [Board!]!
+}
+
+type FloatTuple {
+  first: Float!
+  second: Float!
+}
+type IntTuple {
+  first: Int!
+  second: Int!
+}
+
+type Attachment {
+  id: ID!
+  original_filename: String!
+  url: String!
+  resolution: IntTuple!
+  size: Int!
+  filetype: String!
+  is_spoilered: Boolean!
+}
+
+type Location {
+  id: ID!
+  coordinates: FloatTuple!
+  country: String!
+  city: String!
+  short: String!
+}
+type Ban {
+  id: ID!
+  post: Post!
+  reason: String!
+  is_infinite: Boolean!
+  start: Time!
+  end: Time!
+}
+type Post {
+  id: ID!
+  local_id: Int!
+  is_op: Boolean!
+  header: String!
+  body: String!
+  is_locked: Boolean!
+  is_pinned: Boolean!
+  is_infinite: Boolean!
+  is_banned: Boolean!
+  files: [Attachment!]!
+}
+
+type Query {
+  boards: [Board]!]!
+  board(short_name: String): Board!
+  get_posts(board_short_name: String!, limit: Int!, offset: Int!): [Posts]!
+}
+
+input NewBoard {
+  text: String!
+  userId: String!
+}
+input NewPost{
+  header: String!
+  body: String!
+  files: [Int!]!
+}
+
+type Mutation  {
+  createBoard(input: NewBoard!): board! 
+  createPost(input: NewPost!): board! 
+}
